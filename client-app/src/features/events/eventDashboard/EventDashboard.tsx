@@ -15,6 +15,7 @@ interface Props {
   closeForm: () => void;
   createOrEdit: (event: Event) => void;
   deleteEvent:(id:string) => void;
+  submitting: boolean;
 }
 
 export default function EventDashboard({
@@ -26,12 +27,13 @@ export default function EventDashboard({
   openForm,
   closeForm,
   createOrEdit,
-  deleteEvent
+  deleteEvent,
+  submitting
 }: Props) {
   return (
     <Grid>
       <Grid.Column width='10'>
-        <EventList events={events} selectEvent={selectEvent} deleteEvent={deleteEvent} />
+        <EventList submitting={submitting} events={events} selectEvent={selectEvent} deleteEvent={deleteEvent} />
       </Grid.Column>
       <Grid.Column width='6'>
         {selectedEvent && !editMode && (
@@ -42,7 +44,7 @@ export default function EventDashboard({
           />
         )}
         {editMode && (
-          <EventForm closeForm={closeForm} event={selectedEvent} createOrEdit={createOrEdit} />
+          <EventForm submitting={submitting} closeForm={closeForm} event={selectedEvent} createOrEdit={createOrEdit} />
         )}
       </Grid.Column>
     </Grid>
