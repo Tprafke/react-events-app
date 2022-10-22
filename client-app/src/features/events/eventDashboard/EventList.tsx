@@ -1,20 +1,12 @@
+import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
 import { Segment, Item, Button, Label } from "semantic-ui-react";
-import { Event } from "../../../app/models/event";
+import { useStore } from "../../../app/stores/store";
 
-interface Props {
-  events: Event[];
-  selectEvent: (id: string) => void;
-  deleteEvent: (id: string) => void;
-  submitting: boolean;
-}
+export default observer(function EventList() {
+  const { eventStore } = useStore();
+  const { deleteEvent, eventsByDate, loading } = eventStore;
 
-export default function EventList({
-  events,
-  selectEvent,
-  deleteEvent,
-  submitting,
-}: Props) {
   const [target, setTarget] = useState("");
 
   function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
@@ -25,7 +17,7 @@ export default function EventList({
   return (
     <Segment>
       <Item.Group divided>
-        {events.map((event) => (
+        {eventsByDate.map((event) => (
           <Item key={event.id}>
             <Item.Content>
               <Item.Header as='a'>{event.title}</Item.Header>
@@ -39,14 +31,14 @@ export default function EventList({
               <Item.Extra>
                 <Button
                   // Needs an arrow function to await component rendering
-                  onClick={() => selectEvent(event.id)}
+                  onClick={() => eventStore.selectEvent(event.id)}
                   floated='right'
                   content='View'
                   color='blue'
                 />
                 <Button
                   name={event.id}
-                  loading={submitting && target == event.id}
+                  loading={loading && target === event.id}
                   onClick={(e) => handleEventDelete(e, event.id)}
                   floated='right'
                   content='Delete'
@@ -60,4 +52,4 @@ export default function EventList({
       </Item.Group>
     </Segment>
   );
-}
+});
