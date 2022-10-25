@@ -1,14 +1,12 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { Menu, Container, Button, Icon } from "semantic-ui-react";
-import { useStore } from "../stores/store";
 
 export default function NavBar() {
-  const {eventStore} = useStore();
-
   return (
     <Menu inverted fixed='top'>
       <Container>
-        <Menu.Item header>
+        <Menu.Item as={NavLink} to='/' exact header>
           <Icon
             name='fire'
             size='large'
@@ -17,9 +15,14 @@ export default function NavBar() {
           />
           React Events
         </Menu.Item>
-        <Menu.Item name='Events' />
+        <Menu.Item name='Events' as={NavLink} to='/events' />
         <Menu.Item>
-          <Button onClick={() => eventStore.openForm()} positive content='Create Event' />
+          <Button
+            as={NavLink}
+            to='/createEvent'
+            positive
+            content='Create Event'
+          />
         </Menu.Item>
       </Container>
     </Menu>

@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { Segment, Item, Button, Label } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 
@@ -30,8 +31,8 @@ export default observer(function EventList() {
               </Item.Description>
               <Item.Extra>
                 <Button
-                  // Needs an arrow function to await component rendering
-                  onClick={() => eventStore.selectEvent(event.id)}
+                  as={Link}
+                  to={`events/${event.id}`}
                   floated='right'
                   content='View'
                   color='blue'
