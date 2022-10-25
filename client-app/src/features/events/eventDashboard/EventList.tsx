@@ -1,56 +1,25 @@
 import { observer } from "mobx-react-lite";
-import React, { SyntheticEvent, useState } from "react";
-import { Link } from "react-router-dom";
-import { Segment, Item, Button, Label } from "semantic-ui-react";
+import { Fragment } from "react";
+import { Header } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
+import EventListItem from "./EventListItem";
 
 export default observer(function EventList() {
   const { eventStore } = useStore();
-  const { deleteEvent, eventsByDate, loading } = eventStore;
-
-  const [target, setTarget] = useState("");
-
-  function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
-    setTarget(e.currentTarget.name);
-    deleteEvent(id);
-  }
+  const { groupedEvents } = eventStore;
 
   return (
-    <Segment>
-      <Item.Group divided>
-        {eventsByDate.map((event) => (
-          <Item key={event.id}>
-            <Item.Content>
-              <Item.Header as='a'>{event.title}</Item.Header>
-              <Item.Meta>{event.date}</Item.Meta>
-              <Item.Description>
-                <div>{event.description}</div>
-                <div>
-                  {event.city}, {event.venue}
-                </div>
-              </Item.Description>
-              <Item.Extra>
-                <Button
-                  as={Link}
-                  to={`events/${event.id}`}
-                  floated='right'
-                  content='View'
-                  color='blue'
-                />
-                <Button
-                  name={event.id}
-                  loading={loading && target === event.id}
-                  onClick={(e) => handleEventDelete(e, event.id)}
-                  floated='right'
-                  content='Delete'
-                  color='red'
-                />
-                <Label basic content={event.category} />
-              </Item.Extra>
-            </Item.Content>
-          </Item>
-        ))}
-      </Item.Group>
-    </Segment>
+    <>
+      {groupedEvents.map(([group, events]) => (
+        <Fragment key={group}>
+          <Header sub color='teal'>
+            {group}
+          </Header>
+          {events.map((event) => (
+            <EventListItem key={event.id} event={event} />
+          ))}
+        </Fragment>
+      ))}
+    </>
   );
 });
