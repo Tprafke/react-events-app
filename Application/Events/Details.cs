@@ -7,16 +7,16 @@ using MediatR;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Activities
+namespace Application.Events
 {
     public class Details
     {
-        public class Query : IRequest<Activity>
+        public class Query : IRequest<Event>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Activity>
+        public class Handler : IRequestHandler<Query, Event>
         {
             private readonly DataContext _context;
 
@@ -25,9 +25,9 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Event> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Activities.FindAsync(request.Id);
+                return await _context.Events.FindAsync(request.Id);
             }
         }
     }

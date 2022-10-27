@@ -6,13 +6,13 @@ using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.Activities
+namespace Application.Events
 {
     public class Create
     {
         public class Command : IRequest
         {
-            public Activity Activity { get; set; }
+            public Event Event { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -25,7 +25,7 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.Activities.Add(request.Activity);
+                _context.Events.Add(request.Event);
 
                 await _context.SaveChangesAsync();
 

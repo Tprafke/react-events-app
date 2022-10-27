@@ -29,11 +29,11 @@ const requests = {
 }
 
 const Events = {
-    list: () => requests.get<Event[]>('/activities'),
-    details: (id: string) => requests.get<Event>(`/activities/${id}`),
-    create: (event: Event) => requests.post<void>('/activities', event),
-    update: (event: Event) => requests.put<void>(`/activities/${event.id}`, event),
-    delete: (id: string) => requests.del<void>(`/activities/${id}`)
+    list: () => requests.get<Event[]>('/events'),
+    details: (id: string) => requests.get<Event>(`/events/${id}`),
+    create: (event: Event) => requests.post<void>('/events', event),
+    update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),
+    delete: (id: string) => requests.del<void>(`/events/${id}`)
 }
 
 const agent = {

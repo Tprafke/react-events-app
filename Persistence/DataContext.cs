@@ -13,6 +13,6 @@ namespace Persistence
         {
         }
 
-        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Event> Events { get; set; }
     }
 }

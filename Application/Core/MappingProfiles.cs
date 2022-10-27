@@ -11,7 +11,7 @@ namespace Application.Core
     {
         public MappingProfiles()
         {
-            CreateMap<Activity, Activity>();
+            CreateMap<Event, Event>();
         }
     }
 }
