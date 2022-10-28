@@ -16,34 +16,35 @@ namespace API.Controllers
     public class EventsController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Event>>> GetEvents()
+        public async Task<IActionResult> GetEvents()
         {
-            return await Mediator.Send(new List.Query());
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Event>> GetEvent(Guid id)
+        public async Task<IActionResult> GetEvent(Guid id)
         {
-            return await Mediator.Send(new Details.Query { Id = id });
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEvent(Event _event)
+        public async Task<IActionResult> CreateEvent(Event @event)
         {
-            return Ok(await Mediator.Send(new Create.Command { Event = _event }));
+            return HandleResult(await Mediator.Send(new Create.Command { Event = @event }));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditEvent(Guid id, Event _event)
+        public async Task<IActionResult> EditEvent(Guid id, Event @event)
         {
-            _event.Id = id;
-            return Ok(await Mediator.Send(new Edit.Command { Event = _event }));
+            // @ used for event due to event being a reserved keyword
+            @event.Id = id;
+            return HandleResult(await Mediator.Send(new Edit.Command { Event = @event }));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(Guid id)
         {
-            return Ok(await Mediator.Send(new Delete.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
     }
 }
