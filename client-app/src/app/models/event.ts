@@ -1,7 +1,7 @@
 export interface Event {
     id: string;
     title: string;
-    date: any;
+    date: Date | null;
     description: string;
     category: string;
     city: string;
