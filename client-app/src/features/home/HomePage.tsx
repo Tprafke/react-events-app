@@ -16,8 +16,8 @@ export default function HomePage() {
           React Events
         </Header>
         <Header as='h2' inverted content='Welcome to React Events' />
-        <Button as={Link} to='/events' size='huge' inverted>
-          Get started
+        <Button as={Link} to='/login' size='huge' inverted>
+          Login
         </Button>
       </Container>
     </Segment>

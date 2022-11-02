@@ -1,8 +1,10 @@
+import { UserFormValues } from './../models/user';
 import { history } from './../../index';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { Event } from '../models/event';
 import { store } from '../stores/store';
+import { User } from '../models/user';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -68,8 +70,15 @@ const Events = {
     delete: (id: string) => requests.del<void>(`/events/${id}`)
 }
 
+const Account = {
+    current: () => requests.get<User>('/account'),
+    login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register', user)
+}
+
 const agent = {
-    Events
+    Events,
+    Account
 }
 
 export default agent;
