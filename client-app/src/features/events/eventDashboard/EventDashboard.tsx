@@ -15,7 +15,7 @@ export default observer(function EventDashboard() {
   }, [eventRegistry.size, loadEvents]);
 
   if (eventStore.loadingInitial)
-    return <LoadingComponent content='Loading app' />;
+    return <LoadingComponent content='Loading events' />;
 
   return (
     <Grid>
