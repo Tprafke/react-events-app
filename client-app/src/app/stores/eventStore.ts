@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Event } from "../models/event";
+import { store } from "./store";
 
 export default class EventStore {
     eventRegistry = new Map<string, Event>();
@@ -67,6 +68,14 @@ export default class EventStore {
     }
 
     private setEvent = (event: Event) => {
+        const user = store.userStore.user;
+        if (user) {
+            event.isGoing = event.attendees!.some(
+                a => a.username === user.username
+            )
+            event.isHost = event.hostUsername === user.username;
+            event.host = event.attendees?.find(x => x.username === event.hostUsername);
+        }
         event.date = new Date(event.date!);
         this.eventRegistry.set(event.id, event);
     }

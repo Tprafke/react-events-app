@@ -1,7 +1,8 @@
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-import { Item, Button, Segment, Icon } from "semantic-ui-react";
+import { Item, Button, Segment, Icon, Label } from "semantic-ui-react";
 import { Event } from "../../../app/models/event";
+import EventListItemAttendee from "./EventListItemAttendee";
 
 interface Props {
   event: Event;
@@ -18,7 +19,23 @@ export default function EventListItem({ event }: Props) {
               <Item.Header as={Link} to={`/events/${event.id}`}>
                 {event.title}
               </Item.Header>
-              <Item.Description>Hosted by Bob</Item.Description>
+              <Item.Description>
+                Hosted by {event.host?.displayName}
+              </Item.Description>
+              {event.isHost && (
+                <Item.Description>
+                  <Label basic color='orange'>
+                    You are hosting this event
+                  </Label>
+                </Item.Description>
+              )}
+              {event.isGoing && !event.isHost && (
+                <Item.Description>
+                  <Label basic color='orange'>
+                    You are going to this event
+                  </Label>
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -30,7 +47,9 @@ export default function EventListItem({ event }: Props) {
           {event.venue}
         </span>
       </Segment>
-      <Segment secondary>Attendees go here</Segment>
+      <Segment secondary>
+        <EventListItemAttendee attendees={event.attendees!} />
+      </Segment>
       <Segment clearing>
         <span>{event.description}</span>
         <Button

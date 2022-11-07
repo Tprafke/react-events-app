@@ -42,7 +42,12 @@ export default observer(function EventDetailedHeader({ event }: Props) {
                 />
                 <p>{format(event.date!, "dd MMM yyyy")}</p>
                 <p>
-                  Hosted by <strong>Bob</strong>
+                  Hosted by{" "}
+                  <strong>
+                    <Link to={`/profiles/${event.host?.username}`}>
+                      {event.host?.displayName}
+                    </Link>
+                  </strong>
                 </p>
               </Item.Content>
             </Item>
@@ -50,16 +55,20 @@ export default observer(function EventDetailedHeader({ event }: Props) {
         </Segment>
       </Segment>
       <Segment clearing attached='bottom'>
-        <Button color='teal'>Join Event</Button>
-        <Button>Cancel attendance</Button>
-        <Button
-          as={Link}
-          to={`/manage/${event.id}`}
-          color='orange'
-          floated='right'
-        >
-          Manage Event
-        </Button>
+        {event.isHost ? (
+          <Button
+            as={Link}
+            to={`/manage/${event.id}`}
+            color='orange'
+            floated='right'
+          >
+            Manage Event
+          </Button>
+        ) : event.isGoing ? (
+          <Button>Cancel attendance</Button>
+        ) : (
+          <Button color='teal'>Join Event</Button>
+        )}
       </Segment>
     </Segment.Group>
   );
