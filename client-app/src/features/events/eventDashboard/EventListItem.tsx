@@ -22,7 +22,12 @@ export default function EventListItem({ event }: Props) {
         )}
         <Item.Group>
           <Item>
-            <Item.Image size='tiny' circular src='/assets/Images/user.png' />
+            <Item.Image
+              style={{ marginBottom: 5 }}
+              size='tiny'
+              circular
+              src='/assets/Images/user.png'
+            />
             <Item.Content>
               <Item.Header as={Link} to={`/events/${event.id}`}>
                 {event.title}
