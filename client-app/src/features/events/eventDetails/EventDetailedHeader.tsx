@@ -2,8 +2,9 @@ import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Header, Item, Segment, Image } from "semantic-ui-react";
+import { Button, Header, Item, Segment, Image, Label } from "semantic-ui-react";
 import { Event } from "../../../app/models/event";
+import { useStore } from "../../../app/stores/store";
 
 const eventImageStyle = {
   filter: "brightness(30%)",
@@ -23,9 +24,20 @@ interface Props {
 }
 
 export default observer(function EventDetailedHeader({ event }: Props) {
+  const {
+    eventStore: { updateAttendance, loading, cancelEventToggle },
+  } = useStore();
   return (
     <Segment.Group>
       <Segment basic attached='top' style={{ padding: "0" }}>
+        {event.isCancelled && (
+          <Label
+            style={{ position: "absolute", zIndex: 1000, left: -14, top: 20 }}
+            ribbon
+            color='red'
+            content='Cancelled'
+          />
+        )}
         <Image
           src={`/assets/Images/categoryImages/${event.category}.jpg`}
           fluid
@@ -56,18 +68,38 @@ export default observer(function EventDetailedHeader({ event }: Props) {
       </Segment>
       <Segment clearing attached='bottom'>
         {event.isHost ? (
-          <Button
-            as={Link}
-            to={`/manage/${event.id}`}
-            color='orange'
-            floated='right'
-          >
-            Manage Event
-          </Button>
+          <>
+            <Button
+              color={event.isCancelled ? "green" : "red"}
+              floated='left'
+              basic
+              content={event.isCancelled ? "Re-activate Event" : "Cancel Event"}
+              onClick={cancelEventToggle}
+              loading={loading}
+            />
+            <Button
+              disabled={event.isCancelled}
+              as={Link}
+              to={`/manage/${event.id}`}
+              color='orange'
+              floated='right'
+            >
+              Manage Event
+            </Button>
+          </>
         ) : event.isGoing ? (
-          <Button>Cancel attendance</Button>
+          <Button loading={loading} onClick={updateAttendance}>
+            Cancel attendance
+          </Button>
         ) : (
-          <Button color='teal'>Join Event</Button>
+          <Button
+            disabled={event.isCancelled}
+            loading={loading}
+            onClick={updateAttendance}
+            color='teal'
+          >
+            Join Event
+          </Button>
         )}
       </Segment>
     </Segment.Group>

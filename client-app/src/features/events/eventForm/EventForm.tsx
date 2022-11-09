@@ -12,29 +12,15 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
 import MyDateInput from "../../../app/common/form/MyDateInput";
-import { Event } from "../../../app/models/event";
+import { EventFormValues } from "../../../app/models/event";
 
 export default observer(function EventForm() {
   const history = useHistory();
   const { eventStore } = useStore();
-  const {
-    createEvent,
-    updateEvent,
-    loading,
-    loadEvent,
-    loadingInitial,
-  } = eventStore;
+  const { createEvent, updateEvent, loadEvent, loadingInitial } = eventStore;
   const { id } = useParams<{ id: string }>();
 
-  const [event, setEvent] = useState<Event>({
-    id: "",
-    title: "",
-    category: "",
-    description: "",
-    date: null,
-    city: "",
-    venue: "",
-  });
+  const [event, setEvent] = useState<EventFormValues>(new EventFormValues());
 
   const validationSchema = Yup.object({
     title: Yup.string().required("The event title is required"),
@@ -46,11 +32,11 @@ export default observer(function EventForm() {
   });
 
   useEffect(() => {
-    if (id) loadEvent(id).then((event) => setEvent(event!));
+    if (id) loadEvent(id).then((event) => setEvent(new EventFormValues(event)));
   }, [id, loadEvent]);
 
-  function handleFormSubmit(event: Event) {
-    if (event.id.length === 0) {
+  function handleFormSubmit(event: EventFormValues) {
+    if (!event.id) {
       let newEvent = {
         ...event,
         id: uuid(),
@@ -93,7 +79,7 @@ export default observer(function EventForm() {
             <MyTextInput placeholder='Venue' name='venue' />
             <Button
               disabled={isSubmitting || !dirty || !isValid}
-              loading={loading}
+              loading={isSubmitting}
               floated='right'
               positive
               type='submit'

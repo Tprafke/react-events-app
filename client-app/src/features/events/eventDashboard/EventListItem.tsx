@@ -12,6 +12,14 @@ export default function EventListItem({ event }: Props) {
   return (
     <Segment.Group>
       <Segment>
+        {event.isCancelled && (
+          <Label
+            attached='top'
+            color='red'
+            content='Cancelled'
+            style={{ textAlign: "center" }}
+          />
+        )}
         <Item.Group>
           <Item>
             <Item.Image size='tiny' circular src='/assets/Images/user.png' />
@@ -31,7 +39,7 @@ export default function EventListItem({ event }: Props) {
               )}
               {event.isGoing && !event.isHost && (
                 <Item.Description>
-                  <Label basic color='orange'>
+                  <Label basic color='green'>
                     You are going to this event
                   </Label>
                 </Item.Description>

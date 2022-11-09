@@ -2,7 +2,7 @@ import { UserFormValues } from './../models/user';
 import { history } from './../../index';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
-import { Event } from '../models/event';
+import { Event, EventFormValues } from '../models/event';
 import { store } from '../stores/store';
 import { User } from '../models/user';
 
@@ -71,9 +71,10 @@ const requests = {
 const Events = {
     list: () => requests.get<Event[]>('/events'),
     details: (id: string) => requests.get<Event>(`/events/${id}`),
-    create: (event: Event) => requests.post<void>('/events', event),
-    update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),
-    delete: (id: string) => requests.del<void>(`/events/${id}`)
+    create: (event: EventFormValues) => requests.post<void>('/events', event),
+    update: (event: EventFormValues) => requests.put<void>(`/events/${event.id}`, event),
+    delete: (id: string) => requests.del<void>(`/events/${id}`),
+    attend: (id: string) => requests.post<void>(`events/${id}/attend`, {})
 }
 
 const Account = {
