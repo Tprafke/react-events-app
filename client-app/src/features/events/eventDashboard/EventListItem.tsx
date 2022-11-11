@@ -26,14 +26,17 @@ export default function EventListItem({ event }: Props) {
               style={{ marginBottom: 5 }}
               size='tiny'
               circular
-              src='/assets/Images/user.png'
+              src={event.host?.image || "/assets/Images/user.png"}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/events/${event.id}`}>
                 {event.title}
               </Item.Header>
               <Item.Description>
-                Hosted by {event.host?.displayName}
+                Hosted by{" "}
+                <Link to={`/profiles/${event.hostUsername}`}>
+                  {event.host?.displayName}
+                </Link>
               </Item.Description>
               {event.isHost && (
                 <Item.Description>
