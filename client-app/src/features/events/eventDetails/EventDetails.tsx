@@ -11,12 +11,18 @@ import EventDetailedSidebar from "./EventDetailedSidebar";
 
 export default observer(function EventDetails() {
   const { eventStore } = useStore();
-  const { selectedEvent: event, loadEvent, loadingInitial } = eventStore;
+  const {
+    selectedEvent: event,
+    loadEvent,
+    loadingInitial,
+    clearSelectedEvent,
+  } = eventStore;
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (id) loadEvent(id);
-  }, [id, loadEvent]);
+    return () => clearSelectedEvent();
+  }, [id, loadEvent, clearSelectedEvent]);
 
   if (loadingInitial || !event) return <LoadingComponent />;
 
@@ -25,7 +31,7 @@ export default observer(function EventDetails() {
       <Grid.Column width={10}>
         <EventDetailedHeader event={event} />
         <EventDetailedInfo event={event} />
-        <EventDetailedChat />
+        <EventDetailedChat eventId={event.id} />
       </Grid.Column>
       <Grid.Column width={6}>
         <EventDetailedSidebar event={event} />
