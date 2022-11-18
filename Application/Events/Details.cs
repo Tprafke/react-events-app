@@ -1,10 +1,10 @@
-using Domain;
 using MediatR;
 using Persistence;
 using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
 
 namespace Application.Events
 {
@@ -19,9 +19,11 @@ namespace Application.Events
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _context = context;
             }
@@ -30,7 +32,7 @@ namespace Application.Events
             {
                 // @ used for event due to event being a reserved keyword
                 var @event = await _context.Events
-                    .ProjectTo<EventDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<EventDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 return Result<EventDto>.Success(@event);
