@@ -10,9 +10,12 @@ namespace Application.Events
 {
     public class List
     {
-        public class Query : IRequest<Result<List<EventDto>>> { }
+        public class Query : IRequest<Result<PagedList<EventDto>>>
+        {
+            public PagingParams Params { get; set; }
+        }
 
-        public class Handler : IRequestHandler<Query, Result<List<EventDto>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<EventDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -25,14 +28,17 @@ namespace Application.Events
                 _context = context;
             }
 
-            public async Task<Result<List<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var events = await _context.Events
+                var query = _context.Events
+                    .OrderBy(d => d.Date)
                     .ProjectTo<EventDto>(_mapper.ConfigurationProvider,
                         new { currentUsername = _userAccessor.GetUsername() })
-                    .ToListAsync(cancellationToken);
+                    .AsQueryable();
 
-                return Result<List<EventDto>>.Success(events);
+                return Result<PagedList<EventDto>>.Success(
+                    await PagedList<EventDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
+                );
             }
         }
     }
