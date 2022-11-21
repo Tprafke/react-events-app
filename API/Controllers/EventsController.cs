@@ -10,7 +10,7 @@ namespace API.Controllers
     public class EventsController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetEvents([FromQuery] PagingParams param)
+        public async Task<IActionResult> GetEvents([FromQuery] EventParams param)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
         }

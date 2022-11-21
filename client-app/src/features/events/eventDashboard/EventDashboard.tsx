@@ -7,6 +7,7 @@ import { PagingParams } from "../../../app/models/pagination";
 import { useStore } from "../../../app/stores/store";
 import EventFilters from "./EventFilters";
 import EventList from "./EventList";
+import EventListItemPlaceholder from "./EventListItemPlaceholder";
 
 export default observer(function EventDashboard() {
   const { eventStore } = useStore();
@@ -23,24 +24,28 @@ export default observer(function EventDashboard() {
     if (eventRegistry.size <= 1) loadEvents();
   }, [eventRegistry.size, loadEvents]);
 
-  if (eventStore.loadingInitial && !loadingNext)
-    return <LoadingComponent content='Loading events' />;
-
   return (
     <Grid>
       <Grid.Column width='10'>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={handleGetNext}
-          hasMore={
-            !loadingNext &&
-            !!pagination &&
-            pagination.currentPage < pagination.totalPages
-          }
-          initialLoad={false}
-        >
-          <EventList />
-        </InfiniteScroll>
+        {eventStore.loadingInitial && !loadingNext ? (
+          <>
+            <EventListItemPlaceholder />
+            <EventListItemPlaceholder />
+          </>
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={handleGetNext}
+            hasMore={
+              !loadingNext &&
+              !!pagination &&
+              pagination.currentPage < pagination.totalPages
+            }
+            initialLoad={false}
+          >
+            <EventList />
+          </InfiniteScroll>
+        )}
       </Grid.Column>
       <Grid.Column width='6'>
         <EventFilters />
