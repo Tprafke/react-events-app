@@ -28,7 +28,7 @@ export default observer(function NavBar() {
           React Events
         </Menu.Item>
         <Menu.Item name='Events' as={NavLink} to='/events' />
-        <Menu.Item name='Errors' as={NavLink} to='/errors' />
+        {/* <Menu.Item name='Errors' as={NavLink} to='/errors' /> */}
         <Menu.Item>
           <Button
             as={NavLink}
