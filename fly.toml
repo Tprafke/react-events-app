@@ -6,7 +6,7 @@ kill_timeout = 5
 processes = []
 
 [build]
-  image = "tprafke/reacts-events-app:latest"
+  image = "tprafke/react-events-app:latest"
 
 [env]
   ASPNETCORE_URLS="http://+:8080"
