@@ -44,7 +44,7 @@ export default observer(function ProfileEvents() {
             {userEvents.map((event: UserEvent) => (
               <Card as={Link} to={`/events/${event.id}`} key={event.id}>
                 <Image
-                  src={`/assets/images/categoryImages/${event.category}.jpg`}
+                  src={`/assets/Images/categoryImages/${event.category}.jpg`}
                   style={{ minHeight: 100, objectFit: "cover" }}
                 />
                 <Card.Content>

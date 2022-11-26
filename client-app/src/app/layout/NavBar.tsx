@@ -39,7 +39,7 @@ export default observer(function NavBar() {
         </Menu.Item>
         <Menu.Item position='right'>
           <Image
-            src={user?.image || "/assets/images/user.png"}
+            src={user?.image || "/assets/Images/user.png"}
             avatar
             spaced='right'
           />
