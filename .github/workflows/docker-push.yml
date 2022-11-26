@@ -23,4 +23,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: tprafke/react-events-app:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/react-events-app:latest
